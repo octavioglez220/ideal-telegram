@@ -89,14 +89,19 @@ app.post('/chat', async (req, res) => {
   const history = sessions.get(sessionId);
   const userMsg = (req.body.message || '').trim();
 
-  // Add user message (or synthetic greeting to kick off a new session)
-  if (userMsg) {
+  if (!userMsg) {
+    if (history.length === 0) {
+      // New session: synthetic greeting to get Claude to introduce itself
+      history.push({ role: 'user', content: 'hola' });
+    } else {
+      // Existing session + empty message (page reload): skip API call,
+      // the history is intact and the next real message will continue it
+      res.setHeader('Set-Cookie', `sessionId=${sessionId}; HttpOnly; Path=/; SameSite=Lax`);
+      return res.json({ reply: '' });
+    }
+  } else {
     history.push({ role: 'user', content: userMsg });
-  } else if (history.length === 0) {
-    history.push({ role: 'user', content: 'hola' });
   }
-
-  if (!history.length) return res.json({ reply: '' });
 
   try {
     let response = await anthropic.messages.create({
