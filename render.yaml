@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: patient-intake-agent
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node index.js
+    healthCheckPath: /setup
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
