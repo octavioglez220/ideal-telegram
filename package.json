@@ -1,0 +1,16 @@
+{
+  "name": "patient-intake-agent",
+  "version": "1.0.0",
+  "description": "Agente conversacional de registro de pacientes con Claude + Express + PostgreSQL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.55.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pg": "^8.13.3"
+  }
+}
